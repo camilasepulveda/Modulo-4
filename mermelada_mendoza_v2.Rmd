@@ -1,0 +1,569 @@
+---
+title: "Industria de Mermeladas: Panorama Global y Potencial Productivo en Mendoza"
+description: |
+  Análisis comparativo de la cadena de valor global de mermeladas y confituras 
+  frente al potencial agroindustrial de la provincia de Mendoza, Argentina.
+  Basado en estudios de factibilidad regionales e internacionales.
+author:
+  - name: Rocio Negroni
+    affiliation: Universidad Nacional de Cuyo
+  - name: Sofia Blas
+    affiliation: Universidad Nacional de Cuyo
+  - name: Camila Sepulveda
+    affiliation: Universidad Nacional de Cuyo
+  - name: Bianca Lombardo
+    affiliation: Universidad Nacional de Cuyo
+  - name: Luciana Gallina
+    affiliation: Universidad Nacional de Cuyo
+  - name: Eugenio Alastra
+    affiliation: Universidad Nacional de Cuyo
+
+date: "`r Sys.Date()`"
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
+    code_folding: true
+    self_contained: true
+lang: es
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo      = FALSE,
+  warning   = FALSE,
+  message   = FALSE,
+  fig.align = "center"
+)
+
+# ── Paquetes ──────────────────────────────────────────────────────────────────
+library(jsonlite)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+library(scales)
+
+# ── Paleta institucional (tonos mendocinos) ───────────────────────────────────
+col_verde    <- "#2E6B3E"
+col_dorado   <- "#C4A962"
+col_vino     <- "#8B1A1A"
+col_celeste  <- "#4A6B8B"
+col_neutro   <- "#F5F0E8"
+col_gris     <- "#6B7280"
+
+paleta_8 <- c("#2E6B3E","#4A9B6F","#C4A962","#E8C97A",
+               "#8B1A1A","#C45252","#4A6B8B","#95B8D1")
+
+tema_art <- theme_minimal(base_size = 12) +
+  theme(
+    plot.title       = element_text(face = "bold", size = 13, color = "#1a1a1a"),
+    plot.subtitle    = element_text(size = 10, color = col_gris, margin = margin(b = 8)),
+    plot.caption     = element_text(size = 8,  color = col_gris, hjust = 0),
+    axis.title       = element_text(size = 10, color = "#333333"),
+    axis.text        = element_text(size = 9,  color = "#444444"),
+    panel.grid.major = element_line(color = "#E5E7EB", linewidth = 0.4),
+    panel.grid.minor = element_blank(),
+    legend.position  = "bottom",
+    legend.title     = element_text(size = 9),
+    legend.text      = element_text(size = 8),
+    plot.margin      = margin(10, 15, 10, 15)
+  )
+
+# ── Carga del JSON ────────────────────────────────────────────────────────────
+datos <- fromJSON("mermelada_mendoza_v2.json")
+```
+
+## Resumen ejecutivo {#resumen}
+
+El mercado mundial de mermeladas y confituras superó los **USD 9.800 millones** en 
+2023, con una tasa de crecimiento anual compuesta (CAGR) del 4,2 % proyectada 
+hacia 2030. Argentina participa con apenas el 1,1 % de la producción global, pese 
+a contar con una base frutícola de alta calidad concentrada en regiones como 
+Mendoza, donde más del 40 % de la cosecha de carozo no recibe valor agregado.
+
+Este artículo analiza la estructura del mercado global, el posicionamiento 
+argentino y el diferencial estratégico que tiene Mendoza para desarrollar una 
+industria mermelada de mayor valor agregado, exportable y sustentable, tomando 
+como referencia estudios de factibilidad de escala similar en Argentina, Ecuador 
+y España (García Urretabiscaya, 2016; Ayala Pasquel et al., 2023; Sanz Roldán, 2021).
+
+---
+
+## 1. Introducción {#intro}
+
+La mermelada y las confituras de fruta constituyen una de las formas más antiguas 
+de conservación y valor agregado agrícola. En su dimensión industrial moderna, 
+representan un producto de consumo masivo con creciente diferenciación hacia 
+segmentos premium, funcionales y de identidad regional.
+
+El proceso productivo estándar implica la transformación de frutas frescas en 
+productos untables con sólidos solubles ≥ 65° Brix, a través de etapas de 
+recepción, selección, despulpado, cocción con azúcar y pectina, envasado en 
+caliente y pasteurización. Los estudios de referencia coinciden en que la 
+distribución de planta en trayectoria en "U" sobre una superficie mínima de 
+857 m² optimiza el flujo productivo para escalas de 500 kg/día 
+(García Urretabiscaya, 2016; Sanz Roldán, 2021).
+
+Mendoza, con más de 68.000 hectáreas de frutales, dispone de una base de materia 
+prima excepcional. Sin embargo, la transformación agroindustrial en mermeladas 
+permanece subdesarrollada respecto al potencial identificado.
+
+---
+
+## 2. Metodología {#metodo}
+
+El análisis combina datos secundarios de informes de mercado internacionales 
+(Grand View Research, 2024), estadísticas del SENASA e INV para Argentina, y 
+proyecciones de costos basadas en cuatro estudios de factibilidad de escala 
+similar: García Urretabiscaya (2016), Rosales LLiteras (2023), Sanz Roldán 
+(2021) y Ayala Pasquel et al. (2023).
+
+Los indicadores se normalizaron en dólares estadounidenses corrientes (USD 2023) 
+y se expresan en unidades per cápita donde corresponde para facilitar la 
+comparación internacional.
+
+---
+
+## 3. Mercado Global de Mermeladas {#global}
+
+### 3.1 Dimensiones del mercado
+
+```{r tbl-global}
+tibble(
+  Indicador = c(
+    "Valor de mercado (2023)",
+    "Proyección 2030",
+    "CAGR 2023–2030",
+    "Principales regiones"
+  ),
+  Valor = c(
+    "USD 9.820 millones",
+    "USD 13.500 millones",
+    "4,2 % anual",
+    "Asia-Pacífico, Europa, Norteamérica"
+  )
+) |>
+  kable(caption = "Indicadores clave del mercado global de mermeladas (2023)") |>
+  kable_styling(
+    bootstrap_options = c("striped","hover","condensed"),
+    full_width = FALSE, position = "center"
+  ) |>
+  column_spec(1, bold = TRUE)
+```
+
+### 3.2 Producción mundial por país
+
+```{r fig-produccion-global, layout="l-body-outset", fig.cap="Producción mundial de mermeladas por país (miles de toneladas, 2023). Fuente: elaboración propia en base a Grand View Research (2024).", fig.height=4.5}
+df_prod <- as.data.frame(datos$datos_mercado_global$principales_paises_productores)
+
+ggplot(df_prod, aes(
+    x    = reorder(pais, produccion_kt),
+    y    = produccion_kt,
+    fill = reorder(pais, produccion_kt)
+  )) +
+  geom_col(width = 0.7, show.legend = FALSE) +
+  geom_text(
+    aes(label = paste0(produccion_kt, " kt")),
+    hjust = -0.1, size = 3, color = "#333333"
+  ) +
+  coord_flip(clip = "off") +
+  scale_fill_manual(values = rev(paleta_8)) +
+  scale_y_continuous(limits = c(0, 2200), labels = label_comma(suffix = " kt")) +
+  labs(
+    title    = "Producción global de mermeladas",
+    subtitle = "Miles de toneladas métricas · 2023",
+    x = NULL, y = "Producción (kt)"
+  ) +
+  tema_art +
+  theme(panel.grid.major.y = element_blank())
+```
+
+### 3.3 Consumo per cápita comparado
+
+```{r fig-consumo-percapita, fig.cap="Consumo per cápita de mermeladas en países seleccionados (kg/hab/año). Argentina resaltado en vino. Fuente: elaboración propia.", fig.height=4}
+df_cons <- as.data.frame(datos$datos_mercado_global$principales_paises_consumidores)
+
+ggplot(df_cons, aes(
+    x    = reorder(pais, consumo_per_capita_kg),
+    y    = consumo_per_capita_kg,
+    fill = ifelse(pais == "Argentina", col_vino, col_verde)
+  )) +
+  geom_col(width = 0.65, show.legend = FALSE) +
+  geom_text(
+    aes(label = paste0(consumo_per_capita_kg, " kg")),
+    hjust = -0.12, size = 3.2, color = "#333333"
+  ) +
+  coord_flip(clip = "off") +
+  scale_fill_identity() +
+  scale_y_continuous(limits = c(0, 2.6)) +
+  labs(
+    title    = "Consumo per cápita de mermeladas",
+    subtitle = "Kg por habitante por año · países seleccionados · 2023",
+    caption  = "Argentina presenta un consumo significativamente inferior al promedio europeo.",
+    x = NULL, y = "kg / hab / año"
+  ) +
+  tema_art +
+  theme(panel.grid.major.y = element_blank())
+```
+
+### 3.4 Tendencias globales
+
+```{r tbl-tendencias}
+tibble(
+  `#`        = seq_along(datos$datos_mercado_global$tendencias_globales),
+  Tendencia  = datos$datos_mercado_global$tendencias_globales
+) |>
+  kable(caption = "Tendencias globales en la industria de mermeladas") |>
+  kable_styling(bootstrap_options = c("striped","hover"), full_width = TRUE) |>
+  column_spec(1, width = "2em", bold = TRUE, color = col_verde)
+```
+
+---
+
+## 4. El Mercado Argentino {#argentina}
+
+### 4.1 Cuota de mercado por marca
+
+```{r fig-cuota-marcas, fig.cap="Cuota de mercado de mermeladas en Argentina por marca (2023). Fuente: elaboración propia.", fig.height=4}
+df_marcas <- as.data.frame(datos$mercado_argentina$cuota_mercado_marcas)
+
+ggplot(df_marcas, aes(
+    x    = reorder(marca, porcentaje),
+    y    = porcentaje,
+    fill = marca
+  )) +
+  geom_col(width = 0.65, show.legend = FALSE) +
+  geom_text(
+    aes(label = paste0(porcentaje, "%")),
+    hjust = -0.1, size = 3.2, color = "#333333"
+  ) +
+  coord_flip(clip = "off") +
+  scale_fill_manual(values = c(col_verde, col_dorado, col_vino, col_celeste, col_gris)) +
+  scale_y_continuous(limits = c(0, 68)) +
+  labs(
+    title    = "Cuota de mercado — Argentina",
+    subtitle = "Participación porcentual por marca · 2023",
+    x = NULL, y = "Participación (%)"
+  ) +
+  tema_art +
+  theme(panel.grid.major.y = element_blank())
+```
+
+### 4.2 Preferencia de consumo por sabor
+
+Los sabores clásicos dominan el mercado argentino, reflejando la disponibilidad 
+de fruta de carozo y pepita en las principales regiones productoras 
+(García Urretabiscaya, 2016).
+
+```{r fig-sabores, fig.cap="Participación del mercado argentino de mermeladas por sabor (%). Fuente: García Urretabiscaya (2016) y elaboración propia.", fig.height=4}
+df_sab <- as.data.frame(datos$mercado_argentina$participacion_sabores)
+
+ggplot(df_sab, aes(
+    x    = reorder(sabor, porcentaje),
+    y    = porcentaje,
+    fill = sabor
+  )) +
+  geom_col(width = 0.65, show.legend = FALSE) +
+  geom_text(
+    aes(label = paste0(porcentaje, "%")),
+    hjust = -0.1, size = 3.2, color = "#333333"
+  ) +
+  coord_flip(clip = "off") +
+  scale_fill_manual(values = c(paleta_8, col_gris)) +
+  scale_y_continuous(limits = c(0, 26)) +
+  labs(
+    title    = "Preferencia de sabores — mercado argentino",
+    subtitle = "Participación porcentual por variedad · 2023",
+    caption  = "Durazno, frutilla y ciruela concentran el 50% del mercado.",
+    x = NULL, y = "Participación (%)"
+  ) +
+  tema_art +
+  theme(panel.grid.major.y = element_blank())
+```
+
+### 4.3 Segmentación del mercado
+
+```{r fig-segmentos, fig.cap="Segmentación del mercado argentino de mermeladas por canal. Fuente: elaboración propia.", fig.height=3}
+df_seg <- as.data.frame(datos$mercado_argentina$segmentos)
+
+ggplot(df_seg, aes(x = "", y = participacion_pct, fill = segmento)) +
+  geom_col(width = 0.45) +
+  coord_flip() +
+  scale_fill_manual(
+    values = c(col_verde, col_dorado, col_vino),
+    name   = "Segmento"
+  ) +
+  geom_text(
+    aes(label = paste0(participacion_pct, "%")),
+    position = position_stack(vjust = 0.5),
+    color = "white", fontface = "bold", size = 4.5
+  ) +
+  labs(
+    title    = "Estructura del mercado argentino por segmento",
+    subtitle = "Participación porcentual · 2023",
+    x = NULL, y = "Participación (%)"
+  ) +
+  tema_art +
+  theme(axis.text.y = element_blank(), panel.grid.major = element_blank())
+```
+
+---
+
+## 5. Mendoza: Base Frutícola y Potencial Productivo {#mendoza}
+
+### 5.1 Disponibilidad de materia prima
+
+Mendoza concentra una producción frutícola diversa con especies de carozo y pepita 
+que constituyen insumos directos para la industria mermelada. Un factor clave es 
+la elevada proporción de fruta de descarte industrial — estimada entre el 40 y 
+50 % de la cosecha — que actualmente no recibe valor agregado (INV, 2024).
+
+```{r fig-frutas-mendoza, layout="l-body-outset", fig.cap="Producción frutícola de Mendoza: volumen total y proporción destinada a industria (toneladas, 2023). Fuente: INV (2024) y elaboración propia.", fig.height=4.5}
+df_frutas <- as.data.frame(datos$potencial_mendoza$contexto_agricola$principales_frutas) |>
+  mutate(
+    industria_tn = produccion_tn * uso_industria_pct / 100,
+    fresco_tn    = produccion_tn - industria_tn
+  ) |>
+  pivot_longer(
+    cols      = c(fresco_tn, industria_tn),
+    names_to  = "destino",
+    values_to = "toneladas"
+  ) |>
+  mutate(destino = recode(destino,
+    "industria_tn" = "Industria / Descarte",
+    "fresco_tn"    = "Consumo en fresco"
+  ))
+
+ggplot(df_frutas, aes(
+    x    = reorder(fruta, toneladas),
+    y    = toneladas / 1000,
+    fill = destino
+  )) +
+  geom_col(position = "stack", width = 0.7) +
+  coord_flip() +
+  scale_fill_manual(
+    values = c("Industria / Descarte" = col_dorado,
+               "Consumo en fresco"    = col_verde),
+    name = "Destino"
+  ) +
+  scale_y_continuous(labels = label_comma(suffix = " kt")) +
+  labs(
+    title    = "Producción frutícola de Mendoza",
+    subtitle = "Miles de toneladas por fruta y destino estimado · 2023",
+    x = NULL, y = "Producción (miles de tn)"
+  ) +
+  tema_art +
+  theme(panel.grid.major.y = element_blank())
+```
+
+### 5.2 Estructura de costos de producción
+
+A diferencia del análisis de Pareto por impacto económico, la estructura de costos 
+por categoría muestra que el envasado, la mano de obra directa y la materia prima 
+concentran el 71 % de los costos totales (Sanz Roldán, 2021; Marcel, 2023).
+
+```{r fig-costos-torta, fig.cap="Estructura de costos de producción en una planta de mermeladas (% sobre costo total). Fuente: Sanz Roldán (2021), Marcel (2023).", fig.height=4.5}
+df_cost <- as.data.frame(datos$potencial_mendoza$estructura_costos_produccion) |>
+  arrange(desc(porcentaje)) |>
+  mutate(
+    acum   = cumsum(porcentaje),
+    label  = paste0(categoria, "\n", porcentaje, "%"),
+    ypos   = acum - porcentaje / 2
+  )
+
+ggplot(df_cost, aes(x = reorder(categoria, porcentaje), y = porcentaje, fill = categoria)) +
+  geom_col(width = 0.65, show.legend = FALSE) +
+  geom_text(aes(label = paste0(porcentaje, "%")), hjust = -0.1, size = 3.2, color = "#333333") +
+  coord_flip(clip = "off") +
+  scale_fill_manual(values = c(col_verde, col_dorado, col_vino, col_celeste, col_gris)) +
+  scale_y_continuous(limits = c(0, 34)) +
+  labs(
+    title    = "Estructura de costos de producción",
+    subtitle = "Incidencia porcentual por categoría · planta tipo al 100% de capacidad",
+    caption  = "El envasado supera a la materia prima como principal costo: oportunidad para integración vertical.",
+    x = NULL, y = "Incidencia (%)"
+  ) +
+  tema_art +
+  theme(panel.grid.major.y = element_blank())
+```
+
+### 5.3 Proyección económica — planta tipo Mendoza
+
+```{r tbl-proyeccion}
+py <- datos$potencial_mendoza$proyeccion_planta_tipo
+
+tibble(
+  Parámetro = c(
+    "Capacidad instalada",
+    "Días de operación anual",
+    "Producción anual (kg)",
+    "Capacidad en frascos/año",
+    "Precio promedio",
+    "Ingreso anual estimado",
+    "Punto de equilibrio",
+    "ROI estimado",
+    "Período de repago"
+  ),
+  Valor = c(
+    paste0(format(py$capacidad_kg_dia, big.mark = "."), " kg/día"),
+    paste0(py$dias_operacion_anual, " días"),
+    paste0(format(py$produccion_anual_kg, big.mark = "."), " kg"),
+    paste0(format(py$capacidad_frascos_anio, big.mark = "."), " frascos"),
+    paste0("USD ", py$precio_promedio_usd_kg, "/kg"),
+    paste0("USD ", format(py$ingreso_anual_usd, big.mark = ".")),
+    paste0(format(py$punto_equilibrio_kg, big.mark = "."), " kg"),
+    paste0(py$roi_estimado_pct, "%"),
+    paste0(py$payback_anios, " años")
+  )
+) |>
+  kable(caption = "Proyección económica — planta de mermeladas tipo (Mendoza, 500 kg/día)") |>
+  kable_styling(
+    bootstrap_options = c("striped","hover"),
+    full_width = FALSE, position = "center"
+  ) |>
+  column_spec(1, bold = TRUE) |>
+  row_spec(c(6, 8), bold = TRUE, color = col_verde)
+```
+
+---
+
+## 6. Análisis Comparativo: Global vs. Argentina vs. Mendoza {#comparativa}
+
+```{r fig-comparativa, layout="l-body-outset", fig.cap="Comparativa de indicadores clave: promedio global, Argentina y potencial de Mendoza. Fuente: elaboración propia.", fig.height=5}
+df_comp <- as.data.frame(datos$comparativa_global_mendoza) |>
+  pivot_longer(
+    cols      = c(global_promedio, argentina, mendoza_potencial),
+    names_to  = "escenario",
+    values_to = "valor"
+  ) |>
+  mutate(
+    escenario = recode(escenario,
+      "global_promedio"   = "Promedio global",
+      "argentina"         = "Argentina",
+      "mendoza_potencial" = "Mendoza (potencial)"
+    ),
+    ind_corto = case_when(
+      grepl("per cápita",  indicador) ~ "Prod. per cápita\n(kg/hab)",
+      grepl("agregado",    indicador) ~ "Valor agregado\n(USD/kg)",
+      grepl("descarte",    indicador) ~ "Uso descarte\n(%)",
+      grepl("exporta",     indicador) ~ "Exportaciones\n(%)",
+      grepl("crecimiento", indicador) ~ "Crec. mercado\n(% anual)",
+      TRUE                            ~ indicador
+    )
+  )
+
+ggplot(df_comp, aes(x = ind_corto, y = valor, fill = escenario)) +
+  geom_col(position = "dodge", width = 0.72) +
+  scale_fill_manual(
+    values = c(
+      "Promedio global"     = col_gris,
+      "Argentina"           = col_vino,
+      "Mendoza (potencial)" = col_verde
+    ),
+    name = NULL
+  ) +
+  labs(
+    title    = "Comparativa multidimensional: global · Argentina · Mendoza",
+    subtitle = "Cada indicador expresado en su unidad original",
+    caption  = "Nota: las escalas no son comparables entre indicadores por diferencia de unidades.",
+    x = NULL, y = "Valor del indicador"
+  ) +
+  tema_art +
+  theme(legend.position = "top")
+```
+
+```{r tbl-comparativa}
+as.data.frame(datos$comparativa_global_mendoza) |>
+  rename(
+    Indicador            = indicador,
+    `Promedio global`    = global_promedio,
+    `Argentina`          = argentina,
+    `Mendoza (potencial)`= mendoza_potencial
+  ) |>
+  kable(
+    caption = "Indicadores comparativos: global, Argentina y Mendoza",
+    digits  = 1
+  ) |>
+  kable_styling(bootstrap_options = c("striped","hover"), full_width = TRUE) |>
+  column_spec(4, bold = TRUE, color = col_verde)
+```
+
+La comparación revela tres brechas estructurales con alto potencial de cierre:
+
+- **Valor agregado por kg**: el segmento gourmet y de identidad regional puede 
+  elevar el precio promedio de USD 2,4 a más de USD 4,2 por kilogramo, equiparando 
+  los estándares europeos (Sanz Roldán, 2021).
+- **Inserción exportadora**: la participación exportadora del 3 % argentino 
+  contrasta con un potencial del 12 % para Mendoza, aprovechando su posición 
+  bioceánica y disponibilidad de fruta certificable (SENASA, 2024).
+- **Uso de fruta de descarte**: Mendoza puede transformar hasta el 50 % de su 
+  fruta industrial en mermelada, frente al 28 % actual, reduciendo pérdidas 
+  postcosecha y generando empleo formal.
+
+---
+
+## 7. Desafíos y Oportunidades {#desafios}
+
+### 7.1 Brechas identificadas
+
+```{r tbl-brechas}
+tibble(
+  Brecha    = datos$potencial_mendoza$brechas_y_desafios,
+  Prioridad = c("Alta","Alta","Media","Media","Alta")
+) |>
+  kable(caption = "Principales brechas para el desarrollo del sector en Mendoza") |>
+  kable_styling(bootstrap_options = c("striped","hover"), full_width = TRUE) |>
+  column_spec(2,
+    color = ifelse(c("Alta","Alta","Media","Media","Alta") == "Alta", col_vino, col_dorado),
+    bold  = TRUE
+  )
+```
+
+### 7.2 Oportunidades de exportación
+
+Los mercados prioritarios son Brasil, Chile, Estados Unidos (nicho gourmet) y 
+España, aprovechando la ventana arancelaria del Mercosur (arancel 0 % hacia 
+Brasil y Uruguay) y la creciente demanda de productos con identidad regional 
+(SENASA, 2024).
+
+Las certificaciones clave para acceder a mercados internacionales son: 
+habilitación SENASA, Buenas Prácticas de Manufactura (BPM), y certificaciones 
+Halal o Kosher según el mercado destino.
+
+---
+
+## 8. Conclusiones {#conclusiones}
+
+El mercado global de mermeladas ofrece un contexto favorable para el desarrollo 
+agroindustrial en regiones con base frutícola consolidada. Los estudios de 
+factibilidad analizados — en Argentina, Ecuador y España — convergen en que una 
+planta de 500 kg/día puede alcanzar un ROI del 22 % con un período de repago 
+de 3,5 años cuando se optimizan los costos de envasado y se diversifican los 
+canales de comercialización (García Urretabiscaya, 2016; Sanz Roldán, 2021; 
+Ayala Pasquel et al., 2023).
+
+Mendoza reúne las condiciones necesarias para posicionarse como polo productor 
+de mermeladas de valor agregado: disponibilidad de materia prima, infraestructura, 
+mano de obra calificada y acceso a corredores logísticos. Con políticas activas 
+de formalización y financiamiento, la provincia podría triplicar su participación 
+en el mercado argentino y capturar nichos de exportación regionales en un 
+horizonte de cinco años.
+
+---
+
+## Referencias {#referencias}
+
+```{r refs, results='asis'}
+cat(paste0("- ", datos$referencias_apa, collapse = "\n\n"))
+```
+
+---
+
+<details>
+<summary>**Información de sesión**</summary>
+```{r session-info}
+sessionInfo()
+```
+</details>
